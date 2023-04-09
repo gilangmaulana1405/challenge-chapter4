@@ -32,9 +32,11 @@
                 <h6><%= car.nama  %></h6>
                 <h5 class="card-title mt-3"><b><%= car.harga_sewa %> / hari</b></h5>
                 <p class="card-text">Updated at <%= car.updatedAt %></p>
-                <button class="btn btn-outline-danger btn-delete"> <i class="fa fa-trash"></i>
-                    Delete</button>
-                <a href="/cars/edit" class="btn btn-success"> <i class="fa fa-edit"></i>
+                <a href="/cars/delete/<%= car.id %>" onclick="return confirm('yakin mau hapus data ini?')"
+                    class="btn btn-outline-danger btn-delete">
+                    <i class="fa fa-trash"></i>
+                    Delete</a>
+                <a href="/cars/edit/<%= car.id %>" class="btn btn-success"> <i class="fa fa-edit"></i>
                     Edit</a>
             </div>
         </div>

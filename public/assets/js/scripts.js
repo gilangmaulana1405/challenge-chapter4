@@ -25,22 +25,25 @@ window.addEventListener('DOMContentLoaded', event => {
 
 });
 
-document.querySelector('.btn-delete').addEventListener('click', () => {
-    Swal.fire({
-        title: 'Menghapus Data Mobil',
-        text: "Setelah dihapus, data mobil tidak dapat dikembalikan. Yakin ingin menghapus?",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#0D28A6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Ya'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire(
-                'Deleted!',
-                'Your file has been deleted.',
-                'success'
-            )
-        }
-    })
-});
+const deleteConfirm = () => {
+    document.querySelector('.btn-delete').addEventListener('click', () => {
+        Swal.fire({
+            title: 'Menghapus Data Mobil',
+            text: "Setelah dihapus, data mobil tidak dapat dikembalikan. Yakin ingin menghapus?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0D28A6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                )
+            }
+        })
+    });
+    
+}

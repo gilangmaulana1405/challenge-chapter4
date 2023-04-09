@@ -12,12 +12,13 @@ const {
 
 const Car = require('./models/CarModels')
 
-app.use(express.static(__dirname + '/public'))
 app.set('view engine', 'ejs')
 
 app.use(cors())
 app.use(expressLayout)
 app.use(express.json())
+app.use(express.static(__dirname + '/public'))
+app.use(express.urlencoded())
 
 
 app.get('/', (req, res) => {
@@ -39,42 +40,6 @@ app.get('/cars', async (req, res) => {
     })
 })
 
-app.post('/cars', async (req, res) => {
-    try {
-        let response = await Car.create(req.body)
-        res.status(201).json(response)
-    } catch (err) {
-        console.log(err.message)
-    }
-})
-app.put('/cars/:id', async (req, res) => {
-    try {
-        let response = await Car.update(req.body, {
-            where: {
-                id: req.params.id
-            }
-        })
-        res.status(201).json(response)
-    } catch (err) {
-        console.log(err.message)
-    }
-})
-app.delete('/cars/:id', async (req, res) => {
-    try {
-        let response = await Car.destroy({
-            where: {
-                id: req.params.id
-            }
-        })
-        res.status(201).json(response)
-    } catch (err) {
-        console.log(err.message)
-    }
-})
-
-
-
-// form
 app.get('/cars/add', (req, res) => {
     res.render('add', {
         title: 'halaman add car',
@@ -82,12 +47,61 @@ app.get('/cars/add', (req, res) => {
     })
 })
 
-app.get('/cars/edit', (req, res) => {
+app.post('/cars', async (req, res) => {
+    try {
+        let response = await Car.create(req.body)
+        res.redirect('/cars')
+        // res.status(201).json(response)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+
+app.get('/cars/edit/:id', async (req, res) => {
+    const car = await Car.findByPk(req.params.id)
     res.render('edit', {
         title: 'halaman update car',
-        layout: 'layouts/main-layout'
+        layout: 'layouts/main-layout',
+        car
     })
 })
+
+app.post('/cars/update', (req, res) => {
+    try {
+        let carId = req.body.id
+        let car = {
+            nama: req.body.nama,
+            harga_sewa: req.body.harga_sewa,
+            ukuran: req.body.ukuran,
+            foto: req.body.foto
+        }
+        let response = Car.update(car, {
+            where: {
+                id: carId
+            }
+        })
+        res.redirect('/cars')
+        // res.status(201).json(response)
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+app.get('/cars/delete/:id', async (req, res) => {
+    try {
+        let response = await Car.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+        // res.status(201).json(response)
+        res.redirect('/cars')
+    } catch (err) {
+        console.log(err.message)
+    }
+})
+
+
 
 
 
