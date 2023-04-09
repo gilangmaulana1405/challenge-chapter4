@@ -1,0 +1,29 @@
+GET http://localhost:5000/cars
+
+###
+POST http://localhost:5000/cars
+Content-Type: application/json
+
+
+    {
+    "nama" : "honda civic turbo",
+    "harga_sewa" :"Rp. 999000000",
+    "ukuran" : "medium",
+    "foto" : "default.png"
+}
+
+###
+# PUT http://localhost:5000/cars/2
+# Content-Type: application/json
+
+
+#     {
+#     "nama" : "toyota supra",
+#     "harga_sewa" :"Rp. 16000000",
+#     "ukuran" : "medium",
+#     "foto" : "suprabapack.png"
+# }
+
+###
+# DELETE http://localhost:5000/cars/2
+

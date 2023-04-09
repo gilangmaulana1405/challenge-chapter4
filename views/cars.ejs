@@ -1,0 +1,43 @@
+<nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Cars</li>
+        <li class="breadcrumb-item active" aria-current="page">List Car</li>
+    </ol>
+</nav>
+
+<div class="row justify-content-between">
+    <div class="col-4">
+        <h3>Cars</h3>
+    </div>
+    <div class="col-4 btn-add">
+        <a href="/cars/add" class="btn btn-primary">+ Add New Car</a>
+    </div>
+</div>
+
+<div class="row justify-content-start mt-3">
+    <div class="col-8">
+        <button class="btn btn-outline-primary">All</button>
+        <button class="btn btn-outline-primary">Small</button>
+        <button class="btn btn-outline-primary">Medium</button>
+        <button class="btn btn-outline-primary">Large</button>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <% cars.forEach(car => { %>
+    <div class="col-4 mt-3">
+        <div class="card">
+            <img src="assets/img/car1.png" class="card-img-top" style="object-fit: cover; width: 325px; height: 190px;">
+            <div class="card-body">
+                <h6><%= car.nama  %></h6>
+                <h5 class="card-title mt-3"><b><%= car.harga_sewa %> / hari</b></h5>
+                <p class="card-text">Updated at <%= car.updatedAt %></p>
+                <button class="btn btn-outline-danger btn-delete"> <i class="fa fa-trash"></i>
+                    Delete</button>
+                <a href="/cars/edit" class="btn btn-success"> <i class="fa fa-edit"></i>
+                    Edit</a>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+</div>
