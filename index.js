@@ -4,6 +4,24 @@ const port = 5000
 const expressLayout = require('express-ejs-layouts')
 const cors = require('cors')
 const body = require('body-parser')
+const multer = require('multer')
+const path = require('path')
+
+
+// upload image
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/assets/img/uploads')
+    },
+    filename: (req, file, cb) => {
+        console.log(file)
+        cb(null, Date.now() + '-' + file.originalname)
+    }
+})
+
+const upload = multer({
+    storage: storage
+})
 
 const {
     sequelize,
@@ -47,10 +65,20 @@ app.get('/cars/add', (req, res) => {
     })
 })
 
-app.post('/cars', async (req, res) => {
+app.post('/cars', upload.single('foto'), async (req, res) => {
     try {
-        let response = await Car.create(req.body)
-        res.redirect('/cars')
+        let response = await Car.create({
+            nama: req.body.nama,
+            harga_sewa: req.body.harga_sewa,
+            ukuran: req.body.ukuran,
+            foto: req.file.filename,
+        }).then((response) => {
+            res.redirect('/cars')
+        }).catch((err) => {
+            console.error(err)
+        })
+
+
         // res.status(201).json(response)
     } catch (err) {
         console.log(err.message)

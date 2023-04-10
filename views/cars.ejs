@@ -27,7 +27,8 @@
     <% cars.forEach(car => { %>
     <div class="col-4 mt-3">
         <div class="card">
-            <img src="assets/img/car1.png" class="card-img-top" style="object-fit: cover; width: 325px; height: 190px;">
+            <img src="assets/img/uploads/<%= car.foto %>" class="card-img-top"
+                style="object-fit: cover; width: 341px; height: 240px;">
             <div class="card-body">
                 <h6><%= car.nama  %></h6>
                 <h5 class="card-title mt-3"><b><%= car.harga_sewa %> / hari</b></h5>
