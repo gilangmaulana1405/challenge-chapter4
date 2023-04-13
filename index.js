@@ -1,4 +1,7 @@
 const express = require('express')
+const session = require('express-session')
+const cookieParser = require('cookie-parser')
+const flash = require('connect-flash')
 const fs = require('fs')
 const app = express()
 const port = 5000
@@ -9,12 +12,21 @@ const multer = require('multer')
 const path = require('path')
 const {
     body,
-    check,
     validationResult
 } = require('express-validator');
 const {
     Op
 } = require('sequelize');
+
+
+// cek nama mobil tersedia
+const cekNamaMobilTersedia = (nama) => {
+    return Car.findOne({
+        where: {
+            nama: nama
+        }
+    })
+}
 
 
 // upload image
@@ -31,9 +43,6 @@ const upload = multer({
     storage: storage
 })
 
-
-// manggil controller
-// const updatedAt = require('./controllers/CarController')
 
 // manggil model
 const {
@@ -53,6 +62,14 @@ app.use(express.static(__dirname + '/public'))
 app.use(express.urlencoded({
     extented: true
 }))
+app.use(cookieParser('secret'))
+app.use(session({
+    cookie: {maxAge:6000},
+    secret:'secret',
+    resave:true,
+    saveUninitialized: true
+}))
+app.use(flash())
 
 
 
@@ -112,7 +129,8 @@ app.get('/cars', async (req, res) => {
         title: 'halaman cars',
         layout: 'layouts/main-layout',
         cars,
-        date
+        date,
+        message: req.flash('message')
     })
     // res.status(200).json(cars)
 })
@@ -126,7 +144,19 @@ app.get('/cars/add', (req, res) => {
 
 app.post('/cars',
     upload.single('foto'),
-    // body('nama', 'email tidak benar!').isEmail(),
+
+    [
+        body('nama').custom(async (value) => {
+            const namaMobilAda = await cekNamaMobilTersedia(value)
+
+            if (namaMobilAda) {
+                throw new Error('Data mobil sudah ada!')
+            }
+
+            return true
+        })
+    ],
+
     async (req, res) => {
 
         const result = await validationResult(req);
@@ -142,6 +172,7 @@ app.post('/cars',
             ukuran: req.body.ukuran,
             foto: req.file.filename,
         }).then((response) => {
+            req.flash('message', 'Data berhasil ditambahkan!');
             res.redirect('/cars')
         }).catch((err) => {
             console.error(err)
@@ -228,7 +259,6 @@ app.get('/cars/delete/:id', async (req, res) => {
     }
 
 })
-
 
 
 app.listen(port, async (req, res) => {
