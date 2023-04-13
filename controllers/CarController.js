@@ -1,10 +1,7 @@
-// import Car from "../models/CarModel.js";
+// const moment = require('moment')
 
-// export const getCars = async (req, res) => {
-//     try {
-//         const response = await Car.findAll();
-//         res.status(200).json(response);
-//     } catch (error) {
-//         console.log(error.message);
-//     }
+// const updatedAt = (req, res) => {
+//     momen = moment().format('YYYY/MM/DD hh:mm:ss')
 // }
+
+// module.exports = updatedAt
