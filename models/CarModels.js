@@ -7,7 +7,7 @@ const {
 
 const Car = sequelize.define('cars', {
     nama: DataTypes.STRING,
-    harga_sewa: DataTypes.STRING,
+    harga_sewa: DataTypes.INTEGER,
     ukuran: DataTypes.STRING,
     foto: DataTypes.STRING
 })
