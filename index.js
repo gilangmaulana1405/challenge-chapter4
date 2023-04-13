@@ -64,9 +64,11 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser('secret'))
 app.use(session({
-    cookie: {maxAge:6000},
-    secret:'secret',
-    resave:true,
+    cookie: {
+        maxAge: 6000
+    },
+    secret: 'secret',
+    resave: true,
     saveUninitialized: true
 }))
 app.use(flash())
@@ -226,6 +228,7 @@ app.post('/cars/update', upload.single('foto'), async (req, res) => {
             }
         })
 
+        req.flash('message', 'Data berhasil diubah!');
         res.redirect('/cars')
     } catch (err) {
         console.log(err.message)
