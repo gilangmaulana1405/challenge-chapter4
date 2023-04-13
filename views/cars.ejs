@@ -14,12 +14,23 @@
     </div>
 </div>
 
+<div class="row justify-content-center">
+    <div class="col-6">
+        <% if (message.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= message %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+    </div>
+</div>
+
 <div class="row justify-content-start mt-3">
     <div class="col-8">
-        <button class="btn btn-outline-primary">All</button>
-        <button class="btn btn-outline-primary">Small</button>
-        <button class="btn btn-outline-primary">Medium</button>
-        <button class="btn btn-outline-primary">Large</button>
+        <a href="/cars"><button class="btn btn-outline-primary">All</button></a>
+        <a href="/cars?filter=small"><button class="btn btn-outline-primary">Small</button></a>
+        <a href="/cars?filter=medium"><button class="btn btn-outline-primary">Medium</button></a>
+        <a href="/cars?filter=large"><button class="btn btn-outline-primary">Large</button></a>
     </div>
 </div>
 
@@ -31,8 +42,9 @@
                 style="object-fit: cover; width: 341px; height: 240px;">
             <div class="card-body">
                 <h6><%= car.nama  %></h6>
-                <h5 class="card-title mt-3"><b><%= car.harga_sewa %> / hari</b></h5>
-                <p class="card-text">Updated at <%= car.updatedAt %></p>
+                <h5 class="card-title mt-3"><b>Rp <%= car.harga_sewa %> / hari</b></h5>
+                <p class="card-text">Updated at <%= new Date(car.updatedAt).toLocaleDateString('id-ID', date) %></p>
+                <h1><%= car.ukuran %></h1>
                 <a href="/cars/delete/<%= car.id %>" onclick="return confirm('yakin mau hapus data ini?')"
                     class="btn btn-outline-danger btn-delete">
                     <i class="fa fa-trash"></i>
