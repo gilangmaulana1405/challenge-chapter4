@@ -210,7 +210,7 @@ app.post('/cars/update', upload.single('foto'), async (req, res) => {
         let foto = req.file.filename
 
         const filepath = `./public/assets/img/uploads/${car.foto}`
-
+        // jika foto baru tidak sama dengan foto lama maka hapus foto lama, timpa foto baru
         if (foto !== car.foto) {
             fs.unlinkSync(filepath)
         }
@@ -225,7 +225,6 @@ app.post('/cars/update', upload.single('foto'), async (req, res) => {
                 id: carId
             }
         })
-
 
         req.flash('message', 'Data berhasil diubah!');
         res.redirect('/cars')
