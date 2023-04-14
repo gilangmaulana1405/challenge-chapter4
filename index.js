@@ -161,11 +161,16 @@ app.post('/cars',
 
     async (req, res) => {
 
-        const result = await validationResult(req);
-        if (!result.isEmpty()) {
-            return res.status(400).json({
-                errors: result.array()
-            });
+        const errors = await validationResult(req);
+        if (!errors.isEmpty()) {
+            // return res.status(400).json({
+            //     errors: result.array()
+            // });
+            res.render('add', {
+                title: 'halaman add car',
+                layout: 'layouts/main-layout',
+                errors: errors.array()
+            })
         }
 
         let response = await Car.create({
