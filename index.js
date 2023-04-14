@@ -28,7 +28,6 @@ const cekNamaMobilTersedia = (nama) => {
     })
 }
 
-
 // upload image
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -93,6 +92,7 @@ app.get('/cars', async (req, res) => {
         timeZone: 'UTC'
     };
 
+    // filter
     if (req.query.filter) {
         cars = await Car.findAll({
             where: {
@@ -112,16 +112,12 @@ app.get('/cars', async (req, res) => {
         })
     }
 
-    const {
-        search
-    } =
-    req.query
-
-    if (search) {
+    // search
+    if (req.query.search) {
         cars = await Car.findAll({
             where: {
                 nama: {
-                    [Op.like]: '%' + search + '%'
+                    [Op.like]: '%' + req.query.search + '%'
                 }
             }
         })
@@ -147,6 +143,7 @@ app.get('/cars/add', (req, res) => {
 app.post('/cars',
     upload.single('foto'),
 
+    // validasi
     [
         body('nama').custom(async (value) => {
             const namaMobilAda = await cekNamaMobilTersedia(value)
@@ -154,19 +151,14 @@ app.post('/cars',
             if (namaMobilAda) {
                 throw new Error('Data mobil sudah ada!')
             }
-
             return true
         })
     ],
 
     async (req, res) => {
-
         const errors = await validationResult(req);
         if (!errors.isEmpty()) {
-            // return res.status(400).json({
-            //     errors: result.array()
-            // });
-            res.render('add', {
+            return res.render('add', {
                 title: 'halaman add car',
                 layout: 'layouts/main-layout',
                 errors: errors.array()
@@ -184,10 +176,7 @@ app.post('/cars',
         }).catch((err) => {
             console.error(err)
         })
-
-
         // res.status(201).json(response)
-
     })
 
 
@@ -201,19 +190,17 @@ app.get('/cars/edit/:id', async (req, res) => {
 })
 
 app.post('/cars/update', upload.single('foto'), async (req, res) => {
+    const car = await Car.findOne({
+        where: {
+            id: req.body.id
+        }
+    })
 
-    // const car = await Car.findOne({
-    //     id: req.params.id
-    // })
-    // if (!car) {
-    //     return res.status(404).json({
-    //         message: 'Data mobil tidak ditemukan!'
-    //     })
-    // }
-
-    // const filepath = `./public/assets/img/uploads/${car.foto}`
-    // fs.unlinkSync(filepath)
-
+    if (!car) {
+        return res.status(404).json({
+            message: 'Data mobil tidak ditemukan!'
+        })
+    }
 
     try {
         let carId = req.body.id
@@ -221,6 +208,12 @@ app.post('/cars/update', upload.single('foto'), async (req, res) => {
         let harga_sewa = req.body.harga_sewa
         let ukuran = req.body.ukuran
         let foto = req.file.filename
+
+        const filepath = `./public/assets/img/uploads/${car.foto}`
+
+        if (foto !== car.foto) {
+            fs.unlinkSync(filepath)
+        }
 
         await Car.update({
             nama: nama,
@@ -232,6 +225,7 @@ app.post('/cars/update', upload.single('foto'), async (req, res) => {
                 id: carId
             }
         })
+
 
         req.flash('message', 'Data berhasil diubah!');
         res.redirect('/cars')
